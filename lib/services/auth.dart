@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_stuffasia/models/user.dart';
+import 'package:todo_stuffasia/services/database.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -45,6 +46,7 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User user = result.user;
+      DatabaseService(uid: user.uid).updateUserData('0', 'New Crew member', 100);
       return _minifiedUser(user);
     } catch (error) {
       print(error.toString());
