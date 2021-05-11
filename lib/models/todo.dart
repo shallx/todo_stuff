@@ -35,4 +35,8 @@ class Todo {
         'id': id,
         'isDone': isDone,
       };
+
+  bool toggleIsDone() {
+    return isDone = !isDone;
+  }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_stuffasia/controllers/todos_controller.dart';
 import 'package:todo_stuffasia/models/todo.dart';
 import 'package:todo_stuffasia/provider/todos.dart';
 import 'package:todo_stuffasia/widget/todo_form_widget.dart';
@@ -54,8 +56,8 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
         createdTime: DateTime.now(),
       );
 
-      final provider = Provider.of<TodosProvider>(context, listen: false);
-      provider.addTodo(todo);
+      final TodosController c = Get.find();
+      c.todos.add(todo);
 
       Navigator.of(context).pop();
     }

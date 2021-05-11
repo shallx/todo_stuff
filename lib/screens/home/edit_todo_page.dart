@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_stuffasia/controllers/todos_controller.dart';
 import 'package:todo_stuffasia/models/todo.dart';
 import 'package:todo_stuffasia/provider/todos.dart';
 import 'package:todo_stuffasia/widget/todo_form_widget.dart';
@@ -28,37 +30,45 @@ class _EditTodoPageState extends State<EditTodoPage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text('Edit Todo'),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                final provider =
-                    Provider.of<TodosProvider>(context, listen: false);
-                provider.removeTodo(widget.todo);
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Edit Todo'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              final provider =
+                  Provider.of<TodosProvider>(context, listen: false);
+              provider.removeTodo(widget.todo);
 
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: TodoFormWidget(
-              title: title,
-              description: description,
-              onChangedTitle: (title) => setState(() => this.title = title),
-              onChangedDescription: (description) =>
-                  setState(() => this.description = description),
-              onSavedTodo: saveTodo,
-            ),
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: TodoFormWidget(
+            title: title,
+            description: description,
+            onChangedTitle: (title) => setState(() {
+              //TODO : Try to find how to omit setState
+              widget.todo.title = title;
+              return this.title = title;
+            }),
+            onChangedDescription: (description) => setState(() {
+              widget.todo.description = description;
+              return this.description = description;
+            }),
+            onSavedTodo: saveTodo,
           ),
         ),
-      );
+      ),
+    );
+  }
 
   void saveTodo() {
     final isValid = _formKey.currentState.validate();
@@ -66,10 +76,11 @@ class _EditTodoPageState extends State<EditTodoPage> {
     if (!isValid) {
       return;
     } else {
-      final provider = Provider.of<TodosProvider>(context, listen: false);
+      // provider.updateTodo(widget.todo, title, description);
 
-      provider.updateTodo(widget.todo, title, description);
-
+      //TODO : Implement Edit Controller
+      final TodosController c = Get.find();
+      c.updateTodo(widget.todo);
       Navigator.of(context).pop();
     }
   }

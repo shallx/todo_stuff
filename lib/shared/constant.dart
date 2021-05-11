@@ -11,3 +11,16 @@ const textInputDecoration = InputDecoration(
     borderSide: BorderSide(color: Colors.pink, width: 2.0),
   ),
 );
+
+// const BoxDecoration fieldBoxDeco = BoxDecoration(boxShadow: [
+//   BoxShadow(
+//       color: Colors.grey[300],
+//       blurRadius: 10,
+//       spreadRadius: 3,
+//       offset: Offset(5, 6)),
+//   BoxShadow(
+//       color: Colors.grey[100],
+//       blurRadius: 10,
+//       spreadRadius: 3,
+//       offset: Offset(-3, 3))
+// ]);

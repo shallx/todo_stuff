@@ -42,51 +42,68 @@ class _SignInState extends State<SignIn> {
               child: Form(
                 key: _formKey,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Email field can't be empty";
-                        }
-                        const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-                        final regExp = RegExp(pattern);
+                    // SizedBox(
+                    //   height: 100.0,
+                    // ),
 
-                        if (!regExp.hasMatch(value)) {
-                          return "not a valid email";
-                        }
-                        return null;
-                      },
-                      decoration:
-                          textInputDecoration.copyWith(hintText: 'email'),
-                      onChanged: (val) {
-                        setState(() {
-                          email = val;
-                        });
-                      },
+                    Container(
+                      margin: EdgeInsets.only(
+                        bottom: 30,
+                      ),
+                      height: 70,
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Hero(
+                          tag: "logo",
+                          child: Image.asset("assets/img/logo.png")),
+                    ),
+
+                    fieldContainer(
+                      TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Email field can't be empty";
+                          }
+                          const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                          final regExp = RegExp(pattern);
+
+                          if (!regExp.hasMatch(value)) {
+                            return "not a valid email";
+                          }
+                          return null;
+                        },
+                        decoration:
+                            textInputDecoration.copyWith(hintText: 'email'),
+                        onChanged: (val) {
+                          setState(() {
+                            email = val;
+                          });
+                        },
+                      ),
                     ),
                     SizedBox(
                       height: 20.0,
                     ),
-                    TextFormField(
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty ||
-                            value.length < 6) {
-                          return "Password must be 6+ characters";
-                        }
-                        return null;
-                      },
-                      onChanged: (val) {
-                        setState(() {
-                          password = val;
-                        });
-                      },
-                      decoration:
-                          textInputDecoration.copyWith(hintText: 'password'),
-                      obscureText: true,
+                    fieldContainer(
+                      TextFormField(
+                        validator: (value) {
+                          if (value == null ||
+                              value.isEmpty ||
+                              value.length < 6) {
+                            return "Password must be 6+ characters";
+                          }
+                          return null;
+                        },
+                        onChanged: (val) {
+                          setState(() {
+                            password = val;
+                          });
+                        },
+                        decoration:
+                            textInputDecoration.copyWith(hintText: 'password'),
+                        obscureText: true,
+                      ),
                     ),
                     SizedBox(
                       height: 20.0,
@@ -127,5 +144,23 @@ class _SignInState extends State<SignIn> {
               ),
             ),
           );
+  }
+
+  Widget fieldContainer(child) {
+    return Container(
+      decoration: BoxDecoration(boxShadow: [
+        BoxShadow(
+            color: Colors.grey[300],
+            blurRadius: 10,
+            spreadRadius: 3,
+            offset: Offset(5, 6)),
+        BoxShadow(
+            color: Colors.grey[100],
+            blurRadius: 10,
+            spreadRadius: 3,
+            offset: Offset(-3, 3))
+      ]),
+      child: child,
+    );
   }
 }
