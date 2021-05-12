@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_stuffasia/models/user.dart';
 import 'package:todo_stuffasia/screens/authenticate/authenticate.dart';
-import 'package:todo_stuffasia/screens/home/home.dart';
+import 'package:todo_stuffasia/screens/home/stupid_page.dart';
 import 'package:todo_stuffasia/screens/home/todo_screen.dart';
 
 import 'home/home_page.dart';

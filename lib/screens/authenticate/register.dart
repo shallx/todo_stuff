@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_stuffasia/services/auth.dart';
 import 'package:todo_stuffasia/shared/loading.dart';
+import 'package:todo_stuffasia/widget/text_field_container.dart';
 
 import '../../shared/constant.dart';
 
@@ -44,8 +45,24 @@ class _RegisterState extends State<Register> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    SizedBox(height: 20.0),
-                    TextFormField(
+                    Container(
+                      margin: EdgeInsets.only(
+                        bottom: 30,
+                      ),
+                      height: 70,
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Hero(
+                        tag: "logo",
+                        child: Image.asset("assets/img/logo.png"),
+                      ),
+                    ),
+                    TextFieldContainer(
+                      isPassword: false,
+                      onChanged: (val) {
+                        setState(() {
+                          email = val;
+                        });
+                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Email field can't be empty";
@@ -58,14 +75,15 @@ class _RegisterState extends State<Register> {
                         }
                         return null;
                       },
-                      decoration:
-                          textInputDecoration.copyWith(hintText: 'email'),
-                      onChanged: (val) {
-                        setState(() => email = val);
-                      },
                     ),
                     SizedBox(height: 20.0),
-                    TextFormField(
+                    TextFieldContainer(
+                      isPassword: true,
+                      onChanged: (val) {
+                        setState(() {
+                          password = val;
+                        });
+                      },
                       validator: (value) {
                         if (value == null ||
                             value.isEmpty ||
@@ -73,12 +91,6 @@ class _RegisterState extends State<Register> {
                           return "Password must be 6+ characters";
                         }
                         return null;
-                      },
-                      obscureText: true,
-                      decoration:
-                          textInputDecoration.copyWith(hintText: 'password'),
-                      onChanged: (val) {
-                        setState(() => password = val);
                       },
                     ),
                     SizedBox(height: 20.0),

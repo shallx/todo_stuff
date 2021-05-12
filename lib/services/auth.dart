@@ -34,8 +34,10 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User user = result.user;
+      print("ONO EROR check korram!!!!!!!!!!");
       return _minifiedUser(user);
     } catch (error) {
+      print("ERROR BLOCK O EROR check korram!!!!!!!!!!");
       print(error.toString());
       return null;
     }
@@ -46,7 +48,8 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User user = result.user;
-      DatabaseService(uid: user.uid).updateUserData('0', 'New Crew member', 100);
+      DatabaseService(uid: user.uid)
+          .updateUserData('0', 'New Crew member', 100);
       return _minifiedUser(user);
     } catch (error) {
       print(error.toString());

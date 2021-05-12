@@ -1,14 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:todo_stuffasia/models/todo.dart';
 
 class TodosController extends GetxController {
   var todos = [].obs;
+  GetStorage getStorage = GetStorage();
+  List storedTodos;
+  int i = 1;
 
   @override
   void onInit() {
-    List storedTodos = GetStorage().read<List>('todos');
+    storedTodos = getStorage.read<List>('todos');
 
     if (storedTodos != null) {
       todos = storedTodos.map((e) => Todo.fromJson(e)).toList().obs;
@@ -16,6 +18,7 @@ class TodosController extends GetxController {
     ever(todos, (_) {
       GetStorage().write('todos', todos.toList());
     });
+    getStorage.write('count', i);
     super.onInit();
   }
 
@@ -40,5 +43,14 @@ class TodosController extends GetxController {
         todos[i] = todo;
       }
     }
+  }
+
+  void printStorageData() {
+    List storedTodos = GetStorage().read<List>('todos');
+    print("Stored Todos!!!!!!!!!!!!!!!!");
+    var x = getStorage.read('count');
+    print(x);
+    getStorage.write('count', x + 1);
+    print(storedTodos);
   }
 }

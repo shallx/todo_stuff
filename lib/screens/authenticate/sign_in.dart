@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo_stuffasia/services/auth.dart';
-import 'package:todo_stuffasia/shared/loading.dart';
-
-import '../../shared/constant.dart';
+import '../../services/auth.dart';
+import '../../shared/loading.dart';
+import '../../widget/text_field_container.dart';
 
 class SignIn extends StatefulWidget {
   final Function toggleView;
@@ -55,59 +54,54 @@ class _SignInState extends State<SignIn> {
                       height: 70,
                       width: MediaQuery.of(context).size.width / 3,
                       child: Hero(
-                          tag: "logo",
-                          child: Image.asset("assets/img/logo.png")),
+                        tag: "logo",
+                        child: Image.asset("assets/img/logo.png"),
+                      ),
                     ),
 
-                    fieldContainer(
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Email field can't be empty";
-                          }
-                          const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-                          final regExp = RegExp(pattern);
+                    TextFieldContainer(
+                      isPassword: false,
+                      onChanged: (val) {
+                        setState(() {
+                          email = val;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Email field can't be empty";
+                        }
+                        const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+                        final regExp = RegExp(pattern);
 
-                          if (!regExp.hasMatch(value)) {
-                            return "not a valid email";
-                          }
-                          return null;
-                        },
-                        decoration:
-                            textInputDecoration.copyWith(hintText: 'email'),
-                        onChanged: (val) {
-                          setState(() {
-                            email = val;
-                          });
-                        },
-                      ),
+                        if (!regExp.hasMatch(value)) {
+                          return "not a valid email";
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(
                       height: 20.0,
                     ),
-                    fieldContainer(
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null ||
-                              value.isEmpty ||
-                              value.length < 6) {
-                            return "Password must be 6+ characters";
-                          }
-                          return null;
-                        },
-                        onChanged: (val) {
-                          setState(() {
-                            password = val;
-                          });
-                        },
-                        decoration:
-                            textInputDecoration.copyWith(hintText: 'password'),
-                        obscureText: true,
-                      ),
+                    TextFieldContainer(
+                      isPassword: true,
+                      onChanged: (val) {
+                        setState(() {
+                          password = val;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            value.length < 6) {
+                          return "Password must be 6+ characters";
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(
                       height: 20.0,
                     ),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -115,6 +109,7 @@ class _SignInState extends State<SignIn> {
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
                               setState(() => isLoading = true);
+                              print("Email: $email\n Password: $password");
                               dynamic result =
                                   await _auth.signIn(email, password);
                               if (result == null) {

@@ -61,9 +61,6 @@ class TodoFormWidget extends StatelessWidget {
         children: [
           Expanded(
             child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.brown[400],
-              ),
               onPressed: onSavedTodo,
               child: Text('Save'),
             ),
