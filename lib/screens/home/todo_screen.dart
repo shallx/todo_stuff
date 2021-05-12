@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:todo_stuffasia/controllers/todos_controller.dart';
+import 'package:todo_stuffasia/models/todo.dart';
 import 'package:todo_stuffasia/services/auth.dart';
 import 'package:todo_stuffasia/widget/add_todo_dialog_widget.dart';
 import 'package:todo_stuffasia/widget/completed_list_widget.dart';
 import 'package:todo_stuffasia/widget/todo_list_widget.dart';
+import '../../widget/search_widget.dart';
+import '../../widget/drawer.dart';
 
 class TodoScreen extends StatefulWidget {
   TodoScreen({Key key}) : super(key: key);
@@ -20,17 +23,26 @@ class _TodoScreenState extends State<TodoScreen> {
 
   GetStorage box = GetStorage();
   List dummyList;
+  int _count = 1;
+  String query = '';
+  TodosController c;
+  List<Todo> todos;
 
-  final tabs = [
-    TodoListWidget(),
-    CompletedListWidget(),
-  ];
+  // final tabs = [
+  //   TodoListWidget(),
+  //   CompletedListWidget(),
+  // ];
 
   @override
   void initState() {
     dummyList = box.read('todos');
     print(dummyList);
-    Get.put(TodosController());
+    if (box.read('count') != null) {
+      _count = box.read('count');
+    }
+
+    c = Get.put(TodosController());
+    todos = c.todos;
     super.initState();
   }
 
@@ -38,43 +50,36 @@ class _TodoScreenState extends State<TodoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Todo"),
+        title: buildSearch(),
+        leading: Align(
+            alignment: Alignment(3, 0),
+            child: Text(
+              "Todo",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+            )),
         actions: [
-          TextButton.icon(
-            onPressed: () async {
-              await _auth.signOut();
+          MoreOptions(
+            all: () {
+              todos = c.todos;
+              setState(() => todos = c.todos);
             },
-            icon: Icon(Icons.person),
-            label: Text("logout"),
-          ),
-          TextButton(
-            child: Text("Show data"),
-            onPressed: () {
-              TodosController c = Get.find();
-              c.printStorageData();
+            completed: () {
+              todos = c.todos;
+              setState(() =>
+                  todos = todos.where((todo) => todo.isDone == true).toList());
+            },
+            remaining: () {
+              todos = c.todos;
+              setState(() =>
+                  todos = todos.where((todo) => todo.isDone == false).toList());
+            },
+            logout: () {
+              _auth.signOut();
             },
           )
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Colors.white.withOpacity(0.7),
-        selectedItemColor: Colors.white,
-        currentIndex: selectedIndex,
-        onTap: (index) => setState(() {
-          selectedIndex = index;
-        }),
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fact_check_outlined),
-            label: 'Todos',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.done, size: 28),
-            label: 'Completed',
-          ),
-        ],
-      ),
+      // drawer: CustomDrawer(),
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -87,25 +92,112 @@ class _TodoScreenState extends State<TodoScreen> {
         ),
         child: Icon(Icons.add),
       ),
-      // body: TodoListWidget(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Wow"),
-            ElevatedButton(
-              onPressed: () {
-                dummyList = box.read('todos');
-                var x = box.read('count') ?? 1;
-                print(dummyList);
-                print(x);
-                box.write('count', x + 1);
-              },
-              child: Text("check"),
-            ),
-          ],
-        ),
+      body: TodoListWidget(localTodos: todos),
+      // body: Center(
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: [
+      //       Text("Wow"),
+      //       ElevatedButton(
+      //         onPressed: () {
+      //           print(_count);
+      //           _count++;
+      //           box.write('count', _count);
+      //         },
+      //         child: Text("check"),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+    );
+  }
+
+  Widget buildSearch() => SearchWidget(
+        text: query,
+        hintText: 'Title or Author Name',
+        onChanged: searchBook,
+      );
+
+  void searchBook(String query) {
+    todos = c.todos;
+
+    final ts = todos.where((todo) {
+      final title = todo.title.toLowerCase();
+      final description = todo.description.toLowerCase();
+      final queryLower = query.toLowerCase();
+      return title.contains(queryLower) || description.contains(queryLower);
+    }).toList();
+
+    setState(() {
+      this.query = query;
+      this.todos = ts;
+    });
+  }
+}
+
+class MoreOptions extends StatelessWidget {
+  final Function all;
+  final Function logout;
+  final Function remaining;
+  final Function completed;
+  const MoreOptions({
+    Key key,
+    this.all,
+    this.logout,
+    this.remaining,
+    this.completed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      icon: Icon(
+        Icons.more_vert,
+        color: Colors.white,
       ),
+      onSelected: (value) {
+        switch (value) {
+          case 'remaining':
+            {
+              remaining();
+            }
+            break;
+          case 'completed':
+            {
+              completed();
+            }
+            break;
+          case 'logout':
+            {
+              logout();
+            }
+            break;
+          default:
+            {
+              all();
+            }
+        }
+      },
+      itemBuilder: (context) {
+        return [
+          PopupMenuItem(
+            child: Text("List all"),
+            value: "all",
+          ),
+          PopupMenuItem(
+            child: Text("Filter by Remaining"),
+            value: "remaining",
+          ),
+          PopupMenuItem(
+            child: Text("Filter by Completed"),
+            value: "completed",
+          ),
+          PopupMenuItem(
+            child: Text("Logout"),
+            value: "logout",
+          ),
+        ];
+      },
     );
   }
 }

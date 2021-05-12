@@ -3,7 +3,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:todo_stuffasia/models/todo.dart';
 
 class TodosController extends GetxController {
-  var todos = [].obs;
+  // var todos = [].obs;
+  RxList<Todo> todos = RxList<Todo>();
   GetStorage getStorage = GetStorage();
   List storedTodos;
   int i = 1;
@@ -13,12 +14,16 @@ class TodosController extends GetxController {
     storedTodos = getStorage.read<List>('todos');
 
     if (storedTodos != null) {
-      todos = storedTodos.map((e) => Todo.fromJson(e)).toList().obs;
+      todos(storedTodos.map((e) => Todo.fromJson(e)).toList());
     }
+
     ever(todos, (_) {
-      GetStorage().write('todos', todos.toList());
+      try {
+        GetStorage().write('todos', todos.toList());
+      } catch (e) {
+        print(e);
+      }
     });
-    getStorage.write('count', i);
     super.onInit();
   }
 
@@ -43,14 +48,5 @@ class TodosController extends GetxController {
         todos[i] = todo;
       }
     }
-  }
-
-  void printStorageData() {
-    List storedTodos = GetStorage().read<List>('todos');
-    print("Stored Todos!!!!!!!!!!!!!!!!");
-    var x = getStorage.read('count');
-    print(x);
-    getStorage.write('count', x + 1);
-    print(storedTodos);
   }
 }
