@@ -30,6 +30,7 @@ class _TodoListWidgetState extends State<TodoListWidget> {
               ),
             )
           : ListView.separated(
+              shrinkWrap: true,
               physics: BouncingScrollPhysics(),
               padding: EdgeInsets.all(16),
               separatorBuilder: (context, index) => Container(height: 8),

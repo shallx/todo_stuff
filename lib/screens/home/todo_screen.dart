@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:todo_stuffasia/controllers/category_controller.dart';
 import 'package:todo_stuffasia/controllers/todos_controller.dart';
+import 'package:todo_stuffasia/models/category.dart';
 import 'package:todo_stuffasia/models/todo.dart';
 import 'package:todo_stuffasia/services/auth.dart';
 import 'package:todo_stuffasia/widget/add_todo_dialog_widget.dart';
@@ -25,14 +27,17 @@ class _TodoScreenState extends State<TodoScreen>
   AnimationController _animationController;
   Animation<double> _animation;
 
-  GetStorage box = GetStorage();
   String query = '';
   TodosController c;
+  CategoryController catc;
   List<Todo> todos;
+  String selectedCategory;
 
   @override
   void initState() {
     c = Get.put(TodosController());
+    catc = Get.put(CategoryController());
+    selectedCategory = catc.categories[0];
     todos = c.todos;
 
     _animationController = AnimationController(
@@ -96,7 +101,58 @@ class _TodoScreenState extends State<TodoScreen>
         animation: _animation,
         animationController: _animationController,
       ),
-      body: TodoListWidget(localTodos: todos),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Wrap(
+              children: [
+                Pills(
+                  onPressed: () {
+                    todos = c.todos;
+                    setState(() => todos = c.todos);
+                  },
+                  text: 'All',
+                ),
+                Pills(
+                  onPressed: () {
+                    todos = c.todos;
+                    setState(() => todos =
+                        todos.where((todo) => todo.isDone == false).toList());
+                  },
+                  text: 'Remaining',
+                ),
+                Pills(
+                  onPressed: () {
+                    todos = c.todos;
+                    setState(() => todos =
+                        todos.where((todo) => todo.isDone == true).toList());
+                  },
+                  text: 'Completed',
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text("Select Category"),
+                DropdownButton(
+                  value: selectedCategory,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCategory = value;
+                      todos.where((todo) => todo.category == value).toList();
+                    });
+                  },
+                  items: catc.categories
+                      .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                      .toList(),
+                ),
+              ],
+            ),
+            TodoListWidget(localTodos: todos),
+          ],
+        ),
+      ),
     );
   }
 
@@ -120,6 +176,35 @@ class _TodoScreenState extends State<TodoScreen>
       this.query = query;
       this.todos = ts;
     });
+  }
+}
+
+class Pills extends StatelessWidget {
+  final String text;
+  final Function onPressed;
+  const Pills({
+    Key key,
+    @required this.text,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      child: OutlinedButton(
+        onPressed: onPressed,
+        child: Text(
+          text,
+          style:
+              TextStyle(color: Colors.teal[600], fontWeight: FontWeight.bold),
+        ),
+        style: OutlinedButton.styleFrom(
+          shape: StadiumBorder(),
+          backgroundColor: Colors.teal[50],
+        ),
+      ),
+    );
   }
 }
 

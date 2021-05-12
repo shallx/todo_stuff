@@ -13,7 +13,7 @@ class TodosController extends GetxController {
 
   @override
   void onInit() {
-    storedTodos = getStorage.read<List>('todos');
+    storedTodos = getStorage.read('todos');
 
     if (storedTodos != null) {
       todos(storedTodos.map((e) => Todo.fromJson(e)).toList());

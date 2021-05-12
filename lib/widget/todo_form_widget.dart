@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:todo_stuffasia/controllers/category_controller.dart';
 import '../models/category.dart';
 
 class TodoFormWidget extends StatefulWidget {
@@ -26,13 +27,13 @@ class TodoFormWidget extends StatefulWidget {
 }
 
 class _TodoFormWidgetState extends State<TodoFormWidget> {
-  List list;
+  CategoryController catc;
   String selectedCategory;
 
   @override
   void initState() {
-    list = CategoryList().list();
-    selectedCategory = list[0];
+    catc = Get.find();
+    selectedCategory = catc.categories[0];
     super.initState();
   }
 
@@ -78,23 +79,25 @@ class _TodoFormWidgetState extends State<TodoFormWidget> {
         ),
       );
 
-  Widget buildCategory() => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text("Category"),
-          DropdownButton(
-            value: selectedCategory,
-            onChanged: (value) {
-              setState(() {
-                selectedCategory = value;
-              });
-              widget.onCategorySelect(value);
-            },
-            items: list
-                .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                .toList(),
-          ),
-        ],
+  Widget buildCategory() => Obx(
+        () => Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text("Category"),
+            DropdownButton(
+              value: selectedCategory,
+              onChanged: (value) {
+                setState(() {
+                  selectedCategory = value;
+                });
+                widget.onCategorySelect(value);
+              },
+              items: catc.categories
+                  .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                  .toList(),
+            ),
+          ],
+        ),
       );
 
   Widget buildButton() => Row(
