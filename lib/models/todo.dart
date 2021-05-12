@@ -10,15 +10,16 @@ class Todo {
   String title;
   String id;
   String description;
+  String category;
   bool isDone;
 
-  Todo({
-    @required this.createdTime,
-    @required this.title,
-    this.description = '',
-    this.id,
-    this.isDone = false,
-  });
+  Todo(
+      {@required this.createdTime,
+      @required this.title,
+      this.description = '',
+      this.id,
+      this.isDone = false,
+      @required this.category});
 
   static Todo fromJson(Map<String, dynamic> json) => Todo(
         createdTime: Utils.toDateTime(json['createdTime']),
@@ -26,6 +27,7 @@ class Todo {
         description: json['description'],
         id: json['id'],
         isDone: json['isDone'],
+        category: json['category'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -34,6 +36,7 @@ class Todo {
         'description': description,
         'id': id,
         'isDone': isDone,
+        'category' : category
       };
 
   bool toggleIsDone() {

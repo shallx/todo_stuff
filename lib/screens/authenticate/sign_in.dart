@@ -141,21 +141,4 @@ class _SignInState extends State<SignIn> {
           );
   }
 
-  Widget fieldContainer(child) {
-    return Container(
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-            color: Colors.grey[300],
-            blurRadius: 10,
-            spreadRadius: 3,
-            offset: Offset(5, 6)),
-        BoxShadow(
-            color: Colors.grey[100],
-            blurRadius: 10,
-            spreadRadius: 3,
-            offset: Offset(-3, 3))
-      ]),
-      child: child,
-    );
-  }
 }

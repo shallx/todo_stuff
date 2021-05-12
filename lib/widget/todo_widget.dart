@@ -53,54 +53,60 @@ class _TodoWidgetState extends State<TodoWidget> {
   Widget buildTodo(BuildContext context) => GestureDetector(
         onTap: () => editTodo(context, widget.todo),
         child: Container(
-          color: Colors.white,
-          padding: EdgeInsets.all(20),
-          child: Row(
-            children: [
-              Checkbox(
-                activeColor: Theme.of(context).primaryColor,
-                checkColor: Colors.white,
-                value: widget.todo.isDone,
-                onChanged: (_) {
-                  // final provider =
-                  //     Provider.of<TodosProvider>(context, listen: false);
-                  // final isDone = provider.toggleTodoStatus(todo);
-                  final isDone = c.markComplete(widget.todo.id);
-                  
-                  setState(() {
-                    widget.todo.isDone = isDone;
-                  });
-                  Utils.showSnackBar(
-                    context, 'Task Updated!',
-                    // isDone ? 'Task completed' : 'Task marked incomplete',
-                  );
-                },
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.todo.title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 22,
-                      ),
-                    ),
-                    if (widget.todo.description.isNotEmpty)
-                      Container(
-                        margin: EdgeInsets.only(top: 4),
-                        child: Text(
-                          widget.todo.description,
-                          style: TextStyle(fontSize: 20, height: 1.5),
+          margin: EdgeInsets.all(5),
+          child: Material(
+            elevation: 2,
+            borderRadius: BorderRadius.circular(5),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                children: [
+                  Checkbox(
+                    activeColor: Theme.of(context).primaryColor,
+                    checkColor: Colors.white,
+                    value: widget.todo.isDone,
+                    onChanged: (_) {
+                      // final provider =
+                      //     Provider.of<TodosProvider>(context, listen: false);
+                      // final isDone = provider.toggleTodoStatus(todo);
+                      final isDone = c.markComplete(widget.todo.id);
+
+                      setState(() {
+                        widget.todo.isDone = isDone;
+                      });
+                      Utils.showSnackBar(
+                        context, 'Task Updated!',
+                        // isDone ? 'Task completed' : 'Task marked incomplete',
+                      );
+                    },
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.todo.title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 22,
+                          ),
                         ),
-                      )
-                  ],
-                ),
+                        if (widget.todo.description.isNotEmpty)
+                          Container(
+                            margin: EdgeInsets.only(top: 4),
+                            child: Text(
+                              widget.todo.description,
+                              style: TextStyle(fontSize: 20, height: 1.5),
+                            ),
+                          )
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       );

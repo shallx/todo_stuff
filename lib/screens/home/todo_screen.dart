@@ -114,7 +114,7 @@ class _TodoScreenState extends State<TodoScreen> {
 
   Widget buildSearch() => SearchWidget(
         text: query,
-        hintText: 'Title or Author Name',
+        hintText: 'Task or Description',
         onChanged: searchBook,
       );
 

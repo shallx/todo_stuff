@@ -54,6 +54,7 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
         title: title,
         description: description,
         createdTime: DateTime.now(),
+        category: 'general',
       );
 
       final TodosController c = Get.find();
