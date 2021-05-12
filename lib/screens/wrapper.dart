@@ -4,6 +4,7 @@ import 'package:todo_stuffasia/models/user.dart';
 import 'package:todo_stuffasia/screens/authenticate/authenticate.dart';
 import 'package:todo_stuffasia/screens/home/stupid_page.dart';
 import 'package:todo_stuffasia/screens/home/todo_screen.dart';
+import '../screens/categories/categories_screen.dart';
 
 import 'home/home_page.dart';
 

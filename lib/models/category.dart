@@ -14,10 +14,10 @@ class CategoryList {
   List list() {
     // final box = GetStorage();
     List categories = box.read<List>('categories');
-    if (categories != null) {
+    if (categories.isEmpty || categories == null) {
+      categories.add("Important");
       return categories;
     } else {
-      categories.add("Important");
       return categories;
     }
   }

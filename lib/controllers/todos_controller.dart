@@ -5,6 +5,8 @@ import 'package:todo_stuffasia/models/todo.dart';
 class TodosController extends GetxController {
   // var todos = [].obs;
   RxList<Todo> todos = RxList<Todo>();
+  Rx<String> selectedCategory = ''.obs;
+
   GetStorage getStorage = GetStorage();
   List storedTodos;
   int i = 1;

@@ -9,6 +9,7 @@ import 'package:todo_stuffasia/widget/completed_list_widget.dart';
 import 'package:todo_stuffasia/widget/todo_list_widget.dart';
 import '../../widget/search_widget.dart';
 import '../../widget/drawer.dart';
+import '../../widget/floating_bubble.dart';
 
 class TodoScreen extends StatefulWidget {
   TodoScreen({Key key}) : super(key: key);
@@ -17,32 +18,31 @@ class TodoScreen extends StatefulWidget {
   _TodoScreenState createState() => _TodoScreenState();
 }
 
-class _TodoScreenState extends State<TodoScreen> {
+class _TodoScreenState extends State<TodoScreen>
+    with SingleTickerProviderStateMixin {
   int selectedIndex = 0;
   AuthService _auth = AuthService();
+  AnimationController _animationController;
+  Animation<double> _animation;
 
   GetStorage box = GetStorage();
-  List dummyList;
-  int _count = 1;
   String query = '';
   TodosController c;
   List<Todo> todos;
 
-  // final tabs = [
-  //   TodoListWidget(),
-  //   CompletedListWidget(),
-  // ];
-
   @override
   void initState() {
-    dummyList = box.read('todos');
-    print(dummyList);
-    if (box.read('count') != null) {
-      _count = box.read('count');
-    }
-
     c = Get.put(TodosController());
     todos = c.todos;
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 260),
+    );
+
+    final curvedAnimation =
+        CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
+    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
     super.initState();
   }
 
@@ -80,35 +80,23 @@ class _TodoScreenState extends State<TodoScreen> {
         ],
       ),
       // drawer: CustomDrawer(),
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => AddTodoDialogWidget(),
-          barrierDismissible: false,
-        ),
-        child: Icon(Icons.add),
+      // floatingActionButton: FloatingActionButton(
+      //   shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.circular(20),
+      //   ),
+      //   backgroundColor: Theme.of(context).primaryColor,
+      // onPressed: () => showDialog(
+      //   context: context,
+      //   builder: (context) => AddTodoDialogWidget(),
+      //   barrierDismissible: false,
+      // ),
+      //   child: Icon(Icons.add),
+      // ),
+      floatingActionButton: FloatBubble(
+        animation: _animation,
+        animationController: _animationController,
       ),
       body: TodoListWidget(localTodos: todos),
-      // body: Center(
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: [
-      //       Text("Wow"),
-      //       ElevatedButton(
-      //         onPressed: () {
-      //           print(_count);
-      //           _count++;
-      //           box.write('count', _count);
-      //         },
-      //         child: Text("check"),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 

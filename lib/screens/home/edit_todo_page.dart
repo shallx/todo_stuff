@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -64,6 +65,9 @@ class _EditTodoPageState extends State<EditTodoPage> {
               return this.description = description;
             }),
             onSavedTodo: saveTodo,
+            onCategorySelect: (category) => setState(() => {
+              widget.todo.category = category
+            }),
           ),
         ),
       ),

@@ -8,6 +8,7 @@ class TodoFormWidget extends StatefulWidget {
   final String description;
   final ValueChanged<String> onChangedTitle;
   final ValueChanged<String> onChangedDescription;
+  final ValueChanged<String> onCategorySelect;
   final VoidCallback onSavedTodo;
 
   const TodoFormWidget({
@@ -17,6 +18,7 @@ class TodoFormWidget extends StatefulWidget {
     @required this.onChangedTitle,
     @required this.onChangedDescription,
     @required this.onSavedTodo,
+    this.onCategorySelect,
   }) : super(key: key);
 
   @override
@@ -86,6 +88,7 @@ class _TodoFormWidgetState extends State<TodoFormWidget> {
               setState(() {
                 selectedCategory = value;
               });
+              widget.onCategorySelect(value);
             },
             items: list
                 .map((e) => DropdownMenuItem(value: e, child: Text(e)))
