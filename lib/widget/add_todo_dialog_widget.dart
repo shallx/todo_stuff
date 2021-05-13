@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_stuffasia/controllers/category_controller.dart';
 import 'package:todo_stuffasia/controllers/todos_controller.dart';
 import 'package:todo_stuffasia/models/todo.dart';
 import 'package:todo_stuffasia/provider/todos.dart';
@@ -15,6 +16,14 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
   final _formKey = GlobalKey<FormState>();
   String title = '';
   String description = '';
+  String category = '';
+
+  @override
+  void initState() {
+    CategoryController catc = Get.find();
+    category = catc.categories[0];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) => AlertDialog(
@@ -37,6 +46,11 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
                 onChangedDescription: (description) =>
                     setState(() => this.description = description),
                 onSavedTodo: addTodo,
+                onCategorySelect: (cat) {
+                  print('Category!!!!!!!!!!');
+                  print(cat);
+                  setState(() => this.category = cat);
+                },
               ),
             ],
           ),
@@ -53,12 +67,13 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
         id: DateTime.now().toString(),
         title: title,
         description: description,
-        createdTime: DateTime.now(),
-        category: 'general',
+        // createdTime: DateTime.now(),
+        category: category,
       );
 
       final TodosController c = Get.find();
-      c.todos.add(todo);
+      // c.todos.add(todo);
+      c.addTodo(todo);
 
       Navigator.of(context).pop();
     }

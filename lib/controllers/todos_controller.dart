@@ -7,36 +7,44 @@ class TodosController extends GetxController {
   RxList<Todo> todos = RxList<Todo>();
   Rx<String> selectedCategory = ''.obs;
 
-  GetStorage getStorage = GetStorage();
+  GetStorage box = GetStorage();
   List storedTodos;
   int i = 1;
 
   @override
   void onInit() {
-    storedTodos = getStorage.read('todos');
+    storedTodos = box.read('todos');
 
     if (storedTodos != null) {
       todos(storedTodos.map((e) => Todo.fromJson(e)).toList());
     }
 
-    ever(todos, (_) {
-      try {
-        GetStorage().write('todos', todos.toList());
-      } catch (e) {
-        print(e);
-      }
-    });
+    // ever(todos, (_) {
+    //   try {
+    //     GetStorage().write('todos', todos.toList());
+    //   } catch (e) {
+    //     print(e);
+    //   }
+    // });
     super.onInit();
+  }
+
+  void addTodo(Todo todo) {
+    todos.add(todo);
+    box.write('todos', todos);
   }
 
   void removeTodo(int index) {
     todos.removeAt(index);
+    box.write('todos', todos);
   }
 
   bool markComplete(String id) {
     for (int i = 0; i < todos.length; i++) {
       if (todos[i].id == id) {
-        return todos[i].toggleIsDone();
+        bool isDone = todos[i].toggleIsDone();
+        box.write('todos', todos);
+        return isDone;
       }
     }
     return false;
@@ -45,10 +53,9 @@ class TodosController extends GetxController {
   void updateTodo(Todo todo) {
     for (int i = 0; i < todos.length; i++) {
       if (todos[i].id == todo.id) {
-        print("Found which one to change-------");
-        print(todo.description);
         todos[i] = todo;
       }
     }
+    box.write('todos', todos);
   }
 }

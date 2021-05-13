@@ -10,7 +10,7 @@ class CategoryController extends GetxController {
   void onInit() {
     var cats = box.read('categories');
     if (cats.isEmpty || cats == null) {
-      cats.add('Important');
+      cats.add('General');
     }
     categories(cats);
     // ever(categories, (_) => {box.write('categories', categories)});
@@ -22,12 +22,16 @@ class CategoryController extends GetxController {
     box.write('categories', categories);
   }
 
-  void removeCatAt(int index) {
+  bool removeCatAt(int index) {
+    if (categories.length == 1) {
+      return false;
+    }
     categories.removeAt(index);
     box.write('categories', categories);
+    return true;
   }
 
   void clearAllCats() {
-    box.write('categories', []);
+    box.write('categories', ['General']);
   }
 }

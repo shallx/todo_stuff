@@ -24,24 +24,12 @@ class _SignInState extends State<SignIn> {
     return isLoading
         ? Loading()
         : Scaffold(
-            appBar: AppBar(
-              title: Text("Sign in Page"),
-              actions: [
-                TextButton.icon(
-                  onPressed: () {
-                    widget.toggleView();
-                  },
-                  icon: Icon(Icons.logout),
-                  label: Text("Register"),
-                ),
-              ],
-            ),
             body: Container(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
               child: Form(
                 key: _formKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // SizedBox(
                     //   height: 100.0,
@@ -102,43 +90,63 @@ class _SignInState extends State<SignIn> {
                       height: 20.0,
                     ),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        TextButton(
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                              setState(() => isLoading = true);
-                              print("Email: $email\n Password: $password");
-                              dynamic result =
-                                  await _auth.signIn(email, password);
-                              if (result == null) {
-                                setState(() {
-                                  isLoading = false;
-                                  error =
-                                      "Please enter correct email or password!";
-                                });
-                              }
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            setState(() => isLoading = true);
+                            print("Email: $email\n Password: $password");
+                            dynamic result =
+                                await _auth.signIn(email, password);
+                            if (result == null) {
+                              setState(() {
+                                isLoading = false;
+                                error =
+                                    "Please enter correct email or password!";
+                              });
                             }
-                          },
+                          }
+                        },
+                        style: TextButton.styleFrom(shape: StadiumBorder()),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: Text("Login"),
                         ),
-                        TextButton(
-                          onPressed: () async {},
-                          child: Text("Register"),
-                        ),
-                      ],
+                      ),
                     ),
                     SizedBox(height: 12.0),
                     Text(
                       error,
                       style: TextStyle(color: Colors.red, fontSize: 14.0),
-                    )
+                    ),
+                    Text(
+                      "Don't have an account?",
+                      style: TextStyle(color: Colors.grey[500]),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        widget.toggleView();
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                      ),
+                      child: Text(
+                        "SIGN UP NOW",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
           );
   }
-
 }

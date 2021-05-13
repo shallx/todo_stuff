@@ -27,23 +27,13 @@ class _RegisterState extends State<Register> {
     return isLoading
         ? Loading()
         : Scaffold(
-            appBar: AppBar(
-              title: Text('Sign up'),
-              actions: [
-                TextButton.icon(
-                  onPressed: () {
-                    widget.toggleView();
-                  },
-                  icon: Icon(Icons.login),
-                  label: Text("Login"),
-                ),
-              ],
-            ),
             body: Container(
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
               child: Form(
                 key: _formKey,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
                       margin: EdgeInsets.only(
@@ -94,29 +84,61 @@ class _RegisterState extends State<Register> {
                       },
                     ),
                     SizedBox(height: 20.0),
-                    TextButton(
-                      child: Text(
-                        'Register',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          setState(() => isLoading = true);
-                          dynamic result =
-                              await _auth.register(email, password);
-                          if (result == null) {
-                            setState(() {
-                              isLoading = false;
-                              error = "Validation failed!";
-                            });
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Register',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        style: TextButton.styleFrom(shape: StadiumBorder()),
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            setState(() => isLoading = true);
+                            dynamic result =
+                                await _auth.register(email, password);
+                            if (result == null) {
+                              setState(() {
+                                isLoading = false;
+                                error = "Validation failed!";
+                              });
+                            }
                           }
-                        }
-                      },
+                        },
+                      ),
                     ),
                     SizedBox(height: 12.0),
                     Text(
                       error,
                       style: TextStyle(color: Colors.red, fontSize: 14.0),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Have an account? ",
+                          style: TextStyle(color: Colors.grey[500]),
+                        ),
+                        GestureDetector(
+                          onTap: (){
+                            widget.toggleView();
+                          },
+                          child: Text(
+                            "click here",
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          " to login.",
+                          style: TextStyle(color: Colors.grey[500]),
+                        ),
+                      ],
                     )
                   ],
                 ),

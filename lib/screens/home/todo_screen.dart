@@ -140,7 +140,11 @@ class _TodoScreenState extends State<TodoScreen>
                   onChanged: (value) {
                     setState(() {
                       selectedCategory = value;
-                      todos.where((todo) => todo.category == value).toList();
+                      print("Category: $value");
+                      todos = c.todos;
+                      todos = todos
+                          .where((todo) => todo.category == value)
+                          .toList();
                     });
                   },
                   items: catc.categories

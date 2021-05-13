@@ -120,6 +120,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       //   categories = CategoryList().list();
                       // });
                       c.addCat(category);
+                      setState(() {
+                        category = '';
+                      });
                     },
                     child: Text("Add"),
                   )
