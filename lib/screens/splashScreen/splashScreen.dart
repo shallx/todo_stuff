@@ -6,7 +6,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_stuffasia/models/user.dart';
 import 'package:todo_stuffasia/screens/authenticate/authenticate.dart';
-import 'package:todo_stuffasia/screens/home/stupid_page.dart';
 import 'package:todo_stuffasia/screens/home/todo_screen.dart';
 import 'package:todo_stuffasia/screens/wrapper.dart';
 import 'package:todo_stuffasia/shared/routeTransition.dart';
@@ -25,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void routeToNextPage() async {
     // final user = Provider.of<AuthUser>(context);
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 3));
     // Navigator.push(context, SlideLeftRoute(page: Wrapper()));
     Get.off(() => Wrapper());
   }

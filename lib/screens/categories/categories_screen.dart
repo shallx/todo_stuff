@@ -14,10 +14,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   // List categories;
   String category = "";
   CategoryController c;
+  var _controller = TextEditingController();
 
   @override
   void initState() {
-    // categories = CategoryList().list();
     c = Get.put(CategoryController());
     super.initState();
   }
@@ -41,10 +41,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 return Dismissible(
                   key: UniqueKey(),
                   onDismissed: (direction) {
-                    // setState(() {
-                    //   CategoryList().removeAt(index);
-                    //   categories = CategoryList().list();
-                    // });
                     c.removeCatAt(index);
                   },
                   child: Material(
@@ -61,10 +57,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           ),
                         ),
                         onPressed: () {
-                          // setState(() {
-                          //   CategoryList().removeAt(index);
-                          //   categories = CategoryList().list();
-                          // });
                           c.removeCatAt(index);
                         },
                       ),
@@ -91,6 +83,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 children: [
                   Expanded(
                     child: TextField(
+                      controller: _controller,
                       onChanged: (value) {
                         category = value;
                       },
@@ -114,14 +107,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // CategoryList().add(category);
-                      // setState(() {
-                      //   category = "";
-                      //   categories = CategoryList().list();
-                      // });
                       c.addCat(category);
                       setState(() {
                         category = '';
+                        _controller.text = '';
                       });
                     },
                     child: Text("Add"),

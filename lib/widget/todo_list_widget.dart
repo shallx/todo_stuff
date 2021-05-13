@@ -23,7 +23,8 @@ class _TodoListWidgetState extends State<TodoListWidget> {
 
     return Obx(
       () => widget.localTodos.isEmpty
-          ? Center(
+          ? Container(
+              margin: EdgeInsets.only(top: 100),
               child: Text(
                 'No todos.',
                 style: TextStyle(fontSize: 20),

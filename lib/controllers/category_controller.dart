@@ -9,8 +9,9 @@ class CategoryController extends GetxController {
   @override
   void onInit() {
     var cats = box.read('categories');
-    if (cats.isEmpty || cats == null) {
-      cats.add('General');
+    if (cats == null || cats.isEmpty) {
+      box.write('categories', ['General']);
+      cats = box.read('categories');
     }
     categories(cats);
     // ever(categories, (_) => {box.write('categories', categories)});
